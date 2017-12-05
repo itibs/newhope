@@ -46,7 +46,7 @@ static void gen_a(poly *a, const unsigned char *seed)
 }
 
 
-// API FUNCTIONS 
+// API FUNCTIONS
 
 void newhope_keygen(unsigned char *send, poly *sk)
 {
@@ -58,15 +58,24 @@ void newhope_keygen(unsigned char *send, poly *sk)
   randombytes(noiseseed, 32);
 
   gen_a(&a, seed);
+  //poly_ntt(&a);
+  printf("a: \n");
+  poly_print(&a);
 
   poly_getnoise(sk,noiseseed,0);
-  poly_ntt(sk);
-  
+  printf("sk: \n");
+  poly_print(sk);
+  //poly_ntt(sk);
+
   poly_getnoise(&e,noiseseed,1);
-  poly_ntt(&e);
+  //poly_ntt(&e);
 
   poly_pointwise(&r,sk,&a);
   poly_add(&pk,&e,&r);
+  //poly_ntt(&pk);
+  printf("pk: \n");
+  poly_print(&pk);
+  //poly_invntt(&pk);
 
   encode_a(send, &pk, seed);
 }
@@ -77,22 +86,23 @@ void newhope_sharedb(unsigned char *sharedkey, unsigned char *send, const unsign
   poly sp, ep, v, a, pka, c, epp, bp;
   unsigned char seed[NEWHOPE_SEEDBYTES];
   unsigned char noiseseed[32];
-  
+
   randombytes(noiseseed, 32);
 
   decode_a(&pka, seed, received);
   gen_a(&a, seed);
+  //poly_ntt(&a);
 
   poly_getnoise(&sp,noiseseed,0);
-  poly_ntt(&sp);
+  //poly_ntt(&sp);
   poly_getnoise(&ep,noiseseed,1);
-  poly_ntt(&ep);
+  //poly_ntt(&ep);
 
   poly_pointwise(&bp, &a, &sp);
   poly_add(&bp, &bp, &ep);
-  
+
   poly_pointwise(&v, &pka, &sp);
-  poly_invntt(&v);
+  //poly_invntt(&v);
 
   poly_getnoise(&epp,noiseseed,2);
   poly_add(&v, &v, &epp);
@@ -100,10 +110,10 @@ void newhope_sharedb(unsigned char *sharedkey, unsigned char *send, const unsign
   helprec(&c, &v, noiseseed, 3);
 
   encode_b(send, &bp, &c);
-  
+
   rec(sharedkey, &v, &c);
 
-#ifndef STATISTICAL_TEST 
+#ifndef STATISTICAL_TEST
   sha3256(sharedkey, sharedkey, 32);
 #endif
 }
@@ -116,11 +126,11 @@ void newhope_shareda(unsigned char *sharedkey, const poly *sk, const unsigned ch
   decode_b(&bp, &c, received);
 
   poly_pointwise(&v,sk,&bp);
-  poly_invntt(&v);
- 
+  //poly_invntt(&v);
+
   rec(sharedkey, &v, &c);
 
-#ifndef STATISTICAL_TEST 
-  sha3256(sharedkey, sharedkey, 32); 
+#ifndef STATISTICAL_TEST
+  sha3256(sharedkey, sharedkey, 32);
 #endif
 }

@@ -148,3 +148,11 @@ void poly_invntt(poly *r)
   ntt((uint16_t *)r->coeffs, omegas_inv_montgomery);
   mul_coefficients(r->coeffs, psis_inv_montgomery);
 }
+
+void poly_print(poly *p)
+{
+  int i;
+  for (i=0;i<PARAM_N;i++)
+    printf("%d ", p->coeffs[i]);
+  printf("\n");
+}

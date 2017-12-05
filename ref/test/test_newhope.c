@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define NTESTS 1000
+#define NTESTS 1
 
 int compare_keys(poly *a, poly *b){
 
@@ -115,7 +115,7 @@ int test_invalid_ciphertext()
 int main(){
 
   test_keys();
-  test_invalid_sk_a();
-  test_invalid_ciphertext();
+  //test_invalid_sk_a();
+  //test_invalid_ciphertext();
   return 0;
 }

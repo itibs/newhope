@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "params.h"
+#include <stdio.h>
 
 typedef struct {
   uint16_t coeffs[PARAM_N];
@@ -18,5 +19,7 @@ void poly_pointwise(poly *r, const poly *a, const poly *b);
 
 void poly_frombytes(poly *r, const unsigned char *a);
 void poly_tobytes(unsigned char *r, const poly *p);
+
+void poly_print(poly *p);
 
 #endif
