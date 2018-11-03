@@ -2,6 +2,8 @@
 
 In this project I am trying to attack this algorithm with a brute-force attack.
 
+Last Edit (11/3/2018): This attack doesn't work because the pointwise multiplication of the polynomials only works in NTT domain.
+
 ## Instructions
 
 The script that does the attack is `ref/breaker.py`.
